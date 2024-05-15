@@ -28,6 +28,7 @@ async function run() {
     const database = client.db("sevenStarDB"); // Database Name
     const users = database.collection("user"); // Collection or Table Name
     const rooms = database.collection("rooms"); // Collection or Table Name
+    const booking = database.collection("booking"); // Collection or Table Name
 
     app.post('/user', async(req, res)=>{
       const usr = req.body;
@@ -49,6 +50,10 @@ async function run() {
       const findId = {_id: new ObjectId(id)};
       const details = await rooms.findOne(findId);
       res.send(details)
+    })
+    app.get('/booking/:email', async(req, res)=>{
+      const result = await booking.find({your_email:req.params.email}).toArray();
+      res.send(result);
     })
 
 
