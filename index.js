@@ -52,7 +52,12 @@ async function run() {
       res.send(details)
     })
     app.get('/booking/:email', async(req, res)=>{
-      const result = await booking.find({your_email:req.params.email}).toArray();
+      const result = await booking.find({email:req.params.email}).toArray();
+      res.send(result);
+    })
+    app.post('/booking', async(req, res)=>{
+      const newBooking = req.body;
+      const result = await booking.insertOne(newBooking);
       res.send(result);
     })
 
