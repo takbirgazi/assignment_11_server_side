@@ -29,6 +29,7 @@ async function run() {
     const users = database.collection("user"); // Collection or Table Name
     const rooms = database.collection("rooms"); // Collection or Table Name
     const booking = database.collection("booking"); // Collection or Table Name
+    const review = database.collection("review"); // Collection or Table Name
 
     app.post('/user', async(req, res)=>{
       const usr = req.body;
@@ -78,6 +79,16 @@ async function run() {
     app.post('/booking', async(req, res)=>{
       const newBooking = req.body;
       const result = await booking.insertOne(newBooking);
+      res.send(result);
+    })
+    app.get('/review', async(req, res)=>{
+      const rvw = review.find();
+      const result = await rvw.toArray();
+      res.send(result);
+    })
+    app.post('/review', async(req, res)=>{
+      const newReview = req.body;
+      const result = await review.insertOne(newReview);
       res.send(result);
     })
 
