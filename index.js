@@ -41,7 +41,14 @@ async function run() {
       res.send(result);
     })
     app.get('/rooms', async(req, res)=>{
-      const room = rooms.find();
+      const filter = req.query;
+      const query = {};
+      const option = {
+        sort:{
+          price_per_night: filter.sort === 'asc' ? 1 : -1
+        }
+      };
+      const room = rooms.find(query, option);
       const result = await room.toArray();
       res.send(result);
     })
@@ -50,6 +57,19 @@ async function run() {
       const findId = {_id: new ObjectId(id)};
       const details = await rooms.findOne(findId);
       res.send(details)
+    })
+    app.put('/rooms/:id', async (req, res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert: true};
+      const updateDetails = req.body;
+      const updateDetailsInfo = {
+        $set: {
+            availability: updateDetails.availability
+        }
+      }
+      const result = await rooms.updateOne(filter, updateDetailsInfo, options);
+      res.send(result);
     })
     app.get('/booking/:email', async(req, res)=>{
       const result = await booking.find({email:req.params.email}).toArray();
